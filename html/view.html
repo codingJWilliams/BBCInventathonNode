@@ -28,19 +28,7 @@
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script>/*
-    var socket = io();
-    socket.on('connect', function(){});
-    socket.on("thing-started", function (data){
-      $("h1").text("HIGH FIVE!")
-      $("body").css("background-color","green");
-    })
-    socket.on("thing-ended", function (data){
-      $("h1").text("")
-      $("body").css("background-color","red");
-    })
-    socket.on('disconnect', function(){});*/
-    //$("body").css("background-image","url('bannana-apple.png')");
+  <script>
     var bases = {
       lemon: "url('lemons-base.jpg')",
       bannana: "url('bannana-base.jpg')",
@@ -69,8 +57,9 @@
       current.pic = pic;
       current.word = word;
     }
-
+    var rounds = Array();
     initPic(bases[choose(out)], choose(out))
+    var tempStart = Date();
 
     document.onkeyup = function (e) {
       var mapped = mappings[e.code]
@@ -78,6 +67,13 @@
 
       if (mapped == current.word) {
         // Go to next
+        var tempEnd = Date();
+
+        var timeTaken = tempEnd - tempStart;
+        rounds.push({
+          time-taken: timeTaken
+        })
+
         var key = choose(out)
         var key2 = choose(out)
         initPic(bases[key2], key)
