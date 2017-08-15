@@ -16,6 +16,10 @@
     -o-background-size: cover;
     background-size: cover;
   }
+  @font-face {
+    font-family: captcha;
+    src: url("capcha.ttf");
+  }
   </style>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://bootswatch.com/cyborg/bootstrap.min.css" crossorigin="anonymous">
@@ -26,7 +30,7 @@
     <center>
       <br>
       <br>
-      <h1 class="words">
+      <h1 class="words" style="font-family: captcha">
 
       </h1>
       <h1 class="win">
@@ -56,10 +60,22 @@
     for (key in bases){                                                         // Go throught fruit objects
       if (!bases.hasOwnProperty(key)) continue;                                 // If the current iteration is on a builtin property to a prototype, skip
       out.push(key)                                                             // Else, add the name of fruit to Array
+      color(bases[key].replace("url('", "").replace("')", ""))
+      color(bases[key].replace("url('", "").replace("')", ""))                  // HACK: Preload the image so it won't be black on first attempt
     }
     function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
       return choices[index];
+    }
+    function randomMove(elem){                                                  // Takes a jQuery element like $(".words") and puts it in a random location
+      var posx = (Math.random() * ($(document).width() - 200)).toFixed();       // Chooses a random x
+      var posy = (Math.random() * ($(document).height() - 50)).toFixed();       // Chooses a random Y
+      elem.css({                                                                // Sets the css of the element
+        'position':'absolute',                                                  // To the absolute position of x and y
+        'left':posx+'px',
+        'top':posy+'px',
+        'display':'inline'
+      })
     }
     var mappings = {                                                            // Mappings of keys to fruits
       KeyA: "lemon",                                                            // TODO: Move to config?
@@ -72,7 +88,8 @@
     function initPic(pic, word) {                                               // Function that sets the background and word
       $("html").css("background-image", pic);                                   // TODO: Random location for word?
       $(".words").text(word);
-      $(".words").css("color", color(pic.replace("url('", "").replace("')", "")))
+      $(".words").css("color", color(pic.replace("url('", "").replace("')", "")));
+      randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
       current.word = word;
     }
@@ -92,7 +109,7 @@
         showLoaderOnConfirm: true,
         allowOutsideClick: false
       }).then(function (name) {                                                 // Then when user clicks submit
-        $.ajax({
+        $.ajax({                                                                // TODO: This method is a bit hacky HACK
           url: '/add-score/',                                                   // Make a web request to index.js with
           type: 'post',
           data: {},
@@ -113,7 +130,7 @@
         });
       })
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
-    }, 60000)
+    }, 20000)
 
     var rounds = 0;                                                             // Start at 0 wins
     initPic(bases[choose(out)], choose(out))                                    // Set a random background and text
