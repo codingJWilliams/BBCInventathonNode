@@ -1,4 +1,4 @@
-function color(imgSrc){
+function color(imgSrc){                                                         // For given image source, returns eg rgb(20, 30, 40) with average color of image
   var img = document.createElement('img');
   img.src = imgSrc;
   img.width = 1000;

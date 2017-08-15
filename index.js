@@ -1,51 +1,47 @@
-var app = require('express')();
-var http = require('http').Server(app);
-const fs = require('fs');
-var bodyParser = require('body-parser')
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
+var app = require('express')();                                                 // Import web framework
+var http = require('http').Server(app);                                         // Import HTTP library and init it with web framework
+const fs = require('fs');                                                       // Import FileSystem to save leaderboards
 
-
-function getLeaderboard(callback) {
+function getLeaderboard(callback) {                                             // This reads in the leaderboard and calls "callback([{name: Jay, score: 10}, {name: Dude, score: 20}])"
   fs.readFile('storage/leaderboard.json', "utf8", function(err, data) {
     callback(JSON.parse(data))
   })
 }
-function saveLeaderboard(data){
+function saveLeaderboard(data){                                                 // This saves said json to the disk so it can be read later
   fs.writeFileSync("storage/leaderboard.json", JSON.stringify(data))
 }
-function getTopLeaderboard(callback1){
-  getLeaderboard(function (data) {
-    callback1(data.sort(function (a, b) {
+function getTopLeaderboard(callback1){                                          // Will call "callback1" with the top 20 players
+  getLeaderboard(function (data) {                                              // First it gets the leaderboard
+    callback1(data.sort(function (a, b) {                                       // Then sorts based on the logic:
       if (a.score > b.score) { return -1; };
-      if (a.score < b.score) { return 1; };
-      return 0; }).slice(0, 20)
+      if (a.score < b.score) { return 1; };                                     // Which puts higher scores earlier in the array
+      return 0; }).slice(0, 20)                                                 // Then returns the first 20 (Can be changed)
     )
   }
 )
 }
-function saveToLeaderboard(name, score){
-  getLeaderboard(function(data){
-    data.push({"name": name, "score": score})
-    console.log(data)
-    saveLeaderboard(data)
+function saveToLeaderboard(name, score){                                        // Saves a name and score to leaderboard
+  getLeaderboard(function(data){                                                // First gets leaderboard
+    data.push({"name": name, "score": score})                                   // Then adds an object with {name: "Jay", score: 69}
+    console.log(data)                                                           // Logs for troubleshooting
+    saveLeaderboard(data)                                                       // Saves the data
   })
 }
 
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/html/game.html');
+app.get('/', function(req, res){                                                // On someone requesting the homepage
+  res.sendFile(__dirname + '/html/game.html');                                  // Send them the "game.html" file
 });
-app.post("/add-score/", function(req, res){
-  console.log(req.headers.xname, req.headers.xscore)
-  saveToLeaderboard(req.headers.xname, parseInt(req.headers.xscore));
-  res.end('{"done": true}')
+app.post("/add-score/", function(req, res){                                     // On someone triggering add-score
+  console.log(req.headers.xname, req.headers.xscore)                            // Log their name and score
+  saveToLeaderboard(req.headers.xname, parseInt(req.headers.xscore));           // Then parse their score and save it
+  res.end('{"done": true}')                                                     // Reply with success
 })
-app.get("/get-score/", function(req, res) {
-  getTopLeaderboard(function (data) { res.end( JSON.stringify(data) ) } )
+app.get("/get-score/", function(req, res) {                                     // On someone requesting the leaderboard
+  getTopLeaderboard(function (data) { res.end( JSON.stringify(data) ) } )       // Get the leaderboard then send it to them
 })
-app.use(require('express').static('assets'));
+app.use(require('express').static('assets'));                                   // Finally if none of these rules match, search the "assets" folder, to allow serving images
 
 
-http.listen(4000, function(){
+http.listen(4000, function(){                                                   // Then listen on port 4000 for connections
   console.log('listening on *:4000');
 });

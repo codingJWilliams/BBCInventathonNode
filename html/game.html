@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://bootswatch.com/cyborg/bootstrap.min.css" crossorigin="anonymous">
   <!-- Latest compiled and minified JavaScript -->
   <script src="color.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <body style="background-color: transparent;">
     <center>
       <br>
@@ -47,87 +47,85 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.css">
   <script>
     var bases = {
-      lemon: "url('lemons-base.jpg')",
+      lemon: "url('lemons-base.jpg')",                                          // Links to fruits
       bannana: "url('bannana-base.jpg')",
       lime: "url('lime-base.jpg')",
       orange: "url('orange-base.jpg')"
     }
-    var out = [];
-    for (key in bases){
-      if (!bases.hasOwnProperty(key)) continue;
-      out.push(key)
+    var out = [];                                                               // Initialise array of names of fruits
+    for (key in bases){                                                         // Go throught fruit objects
+      if (!bases.hasOwnProperty(key)) continue;                                 // If the current iteration is on a builtin property to a prototype, skip
+      out.push(key)                                                             // Else, add the name of fruit to Array
     }
-    function choose(choices) {
+    function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
       return choices[index];
     }
-    var mappings = {
-      KeyA: "lemon",
+    var mappings = {                                                            // Mappings of keys to fruits
+      KeyA: "lemon",                                                            // TODO: Move to config?
       KeyW: "bannana",
       KeyS: "lime",
       KeyD: "orange"
     }
     var current = {};
-    function initPic(pic, word) {
-      $("html").css("background-image", pic);
+
+    function initPic(pic, word) {                                               // Function that sets the background and word
+      $("html").css("background-image", pic);                                   // TODO: Random location for word?
       $(".words").text(word);
       $(".words").css("color", color(pic.replace("url('", "").replace("')", "")))
       current.pic = pic;
       current.word = word;
     }
 
-    setTimeout(function () {
-      // After xyz secs
-      $("html").css("background-image", "");
-      $("html").css("background-color", "black");
-      $(".words").fadeOut()
-      $(".win2").text("You scored " + rounds + " points.")
-      $(".win2").fadeIn()
-      $(".sboard").fadeIn()
-      swal({
+    setTimeout(function () {                                                    // Below code runs after 60 seconds has passed
+      $("html").css("background-image", "");                                    // Remove background image
+      $("html").css("background-color", "black");                               // Set the background black
+      $(".words").remove()                                                      // Remove the current word (ie banana)
+      $(".win2").text("You scored " + rounds + " points.")                      // Set winning text
+      $(".win2").fadeIn()                                                       // Fade in the winning text
+      $(".sboard").fadeIn()                                                     // Fade in the scoreboard
+      swal({                                                                    // Create a dialog box:
         title: 'What\'s your name?',
-        input: 'text',
+        input: 'text',                                                          // With an input box
         showCancelButton: true,
         confirmButtonText: 'Submit',
         showLoaderOnConfirm: true,
         allowOutsideClick: false
-      }).then(function (name) {
+      }).then(function (name) {                                                 // Then when user clicks submit
         $.ajax({
-          url: '/add-score/',
+          url: '/add-score/',                                                   // Make a web request to index.js with
           type: 'post',
-          data: {
-              access_token: 'XXXXXXXXXXXXXXXXXXX'
-          },
+          data: {},
           headers: {
-              "XName": name,
+              "XName": name,                                                    // The data name and score, where name is what the user put in the box
               "XScore": rounds
           },
           dataType: 'json',
-          success: function (data) {
+          success: function (data) {                                            // Then when that data is successfully sent
               console.info(data);
-              $.get("/get-score/", function (d) {
-                var arr = JSON.parse(d);
-                for (var i = 0; i < arr.length ; i++) {
-                  $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>")
+              $.get("/get-score/", function (d) {                               // Download the updated scoreboard
+                var arr = JSON.parse(d);                                        // Parse what we've been given
+                for (var i = 0; i < arr.length ; i++) {                         // Go through all the top 20 scores
+                  $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
                 }
               })
           }
         });
       })
-      document.onkeyup = function () {};
+      document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
     }, 60000)
 
-    var rounds = 0;
-    initPic(bases[choose(out)], choose(out))
+    var rounds = 0;                                                             // Start at 0 wins
+    initPic(bases[choose(out)], choose(out))                                    // Set a random background and text
 
-    document.onkeyup = function (e) {
-      var mapped = mappings[e.code]
-      if(mapped == undefined) return;
-      if (mapped == current.word) {
-        var key = choose(out)
-        var key2 = choose(out)
-        rounds++;
-        initPic(bases[key2], key)
+    document.onkeyup = function (e) {                                           // When someone lets go of a key
+      var mapped = mappings[e.code]                                             // Get the key from "mappings", which was defined earlier
+      if(mapped == undefined) return;                                           // If the key isn't registered, forget about it
+      if (mapped == current.word) {                                             // If the key is the correct one TODO: Count incorrect keys
+        var key = choose(out)                                                   // Then pick two random fruits
+        var key2 = choose(out)                                                  // ^
+        rounds++;                                                               // Add 1 to the win counter
+        initPic(bases[key2], key)                                               // And set the background and text to those random fruits
       }
       else {
       }
