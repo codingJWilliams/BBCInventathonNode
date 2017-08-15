@@ -42,9 +42,8 @@
     </center>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="bower_components/sweetalert2/dist/sweetalert2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="bower_components/sweetalert2/dist/sweetalert2.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.css">
   <script>
     var bases = {
       lemon: "url('lemons-base.jpg')",
@@ -104,14 +103,14 @@
           dataType: 'json',
           success: function (data) {
               console.info(data);
+              $.get("/get-score/", function (d) {
+                var arr = JSON.parse(d);
+                for (var i = 0; i < arr.length ; i++) {
+                  $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>")
+                }
+              })
           }
         });
-      })
-      $.get("/get-score/", function (d) {
-        var arr = JSON.parse(d);
-        for (var i = 0; i < arr.length ; i++) {
-          $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>")
-        }
       })
       document.onkeyup = function () {};
     }, 6000)
