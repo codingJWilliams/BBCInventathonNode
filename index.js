@@ -37,7 +37,7 @@ app.get('/', function(req, res){
 });
 app.post("/add-score/", function(req, res){
   console.log(req.headers.xname, req.headers.xscore)
-  saveToLeaderboard(req.headers.xname, req.headers.xscore.parseInt());
+  saveToLeaderboard(req.headers.xname, parseInt(req.headers.xscore));
   res.end('{"done": true}')
 })
 app.use(require('express').static('assets'));
