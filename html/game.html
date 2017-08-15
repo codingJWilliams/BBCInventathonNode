@@ -30,8 +30,15 @@
       </h1>
       <h1 class="win">
       </h1>
-      <h1 class="win2">
+      <h1 class="win2" style="display: none">
       </h1>
+      <center class="sboard" style="display: none">
+        <ul class="list-group" style="width: 30em">
+          <li class="list-group-item">
+            Jay Williams - 39
+          </li>
+        </ul>
+      </center>
     </center>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -71,9 +78,7 @@
       $("html").css("background-image", "");
       $("html").css("background-color", "black");
       $(".words").fadeOut()
-      $(".win").text("You win!")
       $(".win2").text("You scored " + rounds + " points.")
-      $(".win").fadeIn()
       $(".win2").fadeIn()
       document.onkeyup = function () {};
     }, 6000)

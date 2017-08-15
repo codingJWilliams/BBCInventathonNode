@@ -40,6 +40,9 @@ app.post("/add-score/", function(req, res){
   saveToLeaderboard(req.headers.xname, parseInt(req.headers.xscore));
   res.end('{"done": true}')
 })
+app.get("/get-score/", function(req, res) {
+  getTopLeaderboard(function (data) { res.end( JSON.stringify(data) ) } )
+})
 app.use(require('express').static('assets'));
 
 
