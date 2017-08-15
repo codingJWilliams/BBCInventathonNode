@@ -1,8 +1,11 @@
 function color(imgSrc){
   var img = document.createElement('img');
   img.src = imgSrc;
+  img.width = 1000;
+  img.height = 1000;
+  console.log(img)
   var rgb = getAverageRGB(img);
-  return rgb
+  return "rgb(" + rgb.r + ", " + rgb.g + ", " + rgb.b + ")"
 }
 
 function getAverageRGB(imgEl) {
@@ -29,6 +32,7 @@ function getAverageRGB(imgEl) {
       data = context.getImageData(0, 0, width, height);
   } catch(e) {
       /* security error, img on diff domain */alert('x');
+      console.log(e)
       return defaultRGB;
   }
 

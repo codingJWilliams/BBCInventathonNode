@@ -71,6 +71,7 @@
     function initPic(pic, word) {
       $("html").css("background-image", pic);
       $(".words").text(word);
+      $(".words").css("color", color(pic.replace("url('", "").replace("')", "")))
       current.pic = pic;
       current.word = word;
     }
