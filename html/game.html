@@ -16,72 +16,88 @@
     -o-background-size: cover;
     background-size: cover;
   }
-  input[type=text] {
-    border-radius: 10px;
+  input {
+    color: black;
   }
   @font-face {
     font-family: captcha;
     src: url("capcha.ttf");
-  }
-  /* Center the loader */
-  #loader {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    width: 150px;
-    height: 150px;
-    margin: -75px 0 0 -75px;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    width: 120px;
-    height: 120px;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
-  }
-
-  @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
   }
   </style>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://bootswatch.com/cyborg/bootstrap.min.css" crossorigin="anonymous">
   <!-- Latest compiled and minified JavaScript -->
   <script src="color.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
   <body style="background-color: transparent;">
-    <div id="loader"></div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-4"></div>
-        <div class="col-xs-4">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6">
           <div class="panel panel-primary">
             <div class="panel-heading"> Options </div>
             <div class="panel-body">
-              Your Nickname                       | <input type="text" id="nick"><br>
-              Key Names (Like Digit5 or KeyW)<br>
-              Banana                              | <input type="text" id="banana"><br>
-              Lemon                               | <input type="text" id="lemon"><br>
-              Lime                                | <input type="text" id="lime"><br>
-              Orange                              | <input type="text" id="orange"><br>
-              <button class="btn btn-success"> Start Game! </button>
+              <table class="table">
+                <tr>
+                  <td>
+                    Your Nickname
+                  </td>
+                  <td>
+                    <input type="text" id="nick" style="color: black">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Keys: (Like KeyW or Digit2)
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Banana
+                  </td>
+                  <td>
+                    <input type="text" id="banana" style="color: black">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Lemon
+                  </td>
+                  <td>
+                    <input type="text" id="lemon" style="color: black">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Orange
+                  </td>
+                  <td>
+                    <input type="text" id="orange" style="color: black">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Lime
+                  </td>
+                  <td>
+                    <input type="text" id="lime" style="color: black">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button class="btn btn-success" onclick="startTheGame()"> Start Game! </button>
+                  </td>
+                </tr>
             </div>
           </div>
         </div>
-        <div class="col-xs-4"></div>
+        <div class="col-xs-3"></div>
       </div>
     </div>
     <center>
-      </ul>
       <h1 class="words" style="font-family: captcha">
-
       </h1>
       <h1 class="win">
       </h1>
@@ -97,17 +113,27 @@
     </center>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.css">
   <script>
-    var myVar;
-    myVar = setTimeout(showPage, 1000);                                         // 1000 seconds after the page loads, run showPage()
-
-    function showPage() {
+    var mappings = {                                                            // Mappings of keys to fruits
+      KeyA: "lemon",                                                            // TODO: Move to config?
+      KeyW: "banana",
+      KeyS: "lime",
+      KeyD: "orange"
+    }
+    var mappings = {}
+    function startTheGame() {
       /*
       This, basically, removes the html loading wheel and starts the game
       */
-      document.getElementById("loader").style.display = "none";                 // Remove loading wheel
+      $(".container-fluid").css({"display": "none"});
+      $("#banana").val() == "" ? mappings.Key1 = "banana" : mappings[$("#banana").val()] = "banana";
+      $("#lemon").val() == "" ? mappings.Key2 = "lemon" : mappings[$("#lemon").val()] = "lemon";
+      $("#lime").val() == "" ? mappings.Key3 = "lime" : mappings[$("#lime").val()] = "lime";
+      $("#orange").val() == "" ? mappings.Key4 = "orange" : mappings[$("#orange").val()] = "orange";
+      $(".words").css({"display": "inline"})
       initPic(bases[choose(out)], choose(out))                                  // Set a random background and text
     }
     var bases = {
@@ -137,12 +163,6 @@
         'top':posy+'px',
         'display':'inline'
       })
-    }
-    var mappings = {                                                            // Mappings of keys to fruits
-      KeyA: "lemon",                                                            // TODO: Move to config?
-      KeyW: "banana",
-      KeyS: "lime",
-      KeyD: "orange"
     }
     var current = {};
 
