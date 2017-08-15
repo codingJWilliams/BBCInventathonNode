@@ -1,8 +1,7 @@
 {
-  "name": "cards-against-reality",
+  "name": "fruteaser",
   "version": "1.0.0",
-  "description": "A game for very bad people (or good, depending on settings). You fill in a blank with a card to create the most risque answer possible. ",
-  "main": "index.js",
+  "description": "A game to train your brain",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,18 +9,13 @@
     "type": "git",
     "url": "git+https://github.com/codingJWilliams/CardsAgainstReality.git"
   },
-  "keywords": [
-    "cah",
-    "cards",
-    "against",
-    "humanity"
-  ],
-  "author": "Jay M Williams",
+  "keywords": [],
+  "author": "Jay M Williams & BBC",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/codingJWilliams/CardsAgainstReality/issues"
+    "url": "https://github.com/codingJWilliams/BBCInventathonNode/issues"
   },
-  "homepage": "https://github.com/codingJWilliams/CardsAgainstReality#readme",
+  "homepage": "https://github.com/codingJWilliams/BBCInventathonNode/#readme",
   "dependencies": {
     "express": "^4.15.2",
     "socket.io": "^2.0.3"
