@@ -17,12 +17,20 @@
     background-size: cover;
   }
   </style>
-  <body>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://bootswatch.com/cyborg/bootstrap.min.css" crossorigin="anonymous">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <body style="background-color: transparent;">
     <center>
       <br>
       <br>
-      <h1>
+      <h1 class="words">
 
+      </h1>
+      <h1 class="win">
+      </h1>
+      <h1 class="win2">
       </h1>
     </center>
   </body>
@@ -53,29 +61,33 @@
     var current = {};
     function initPic(pic, word) {
       $("html").css("background-image", pic);
-      $("h1").text(word);
+      $(".words").text(word);
       current.pic = pic;
       current.word = word;
     }
-    var rounds = Array();
+
+    setTimeout(function () {
+      // After xyz secs
+      $("html").css("background-image", "");
+      $("html").css("background-color", "black");
+      $(".words").fadeOut()
+      $(".win").text("You win!")
+      $(".win2").text("You scored " + rounds + " points.")
+      $(".win").fadeIn()
+      $(".win2").fadeIn()
+      document.onkeyup = function () {};
+    }, 6000)
+
+    var rounds = 0;
     initPic(bases[choose(out)], choose(out))
-    var tempStart = Date();
 
     document.onkeyup = function (e) {
       var mapped = mappings[e.code]
       if(mapped == undefined) return;
-
       if (mapped == current.word) {
-        // Go to next
-        var tempEnd = Date();
-
-        var timeTaken = tempEnd - tempStart;
-        rounds.push({
-          time-taken: timeTaken
-        })
-
         var key = choose(out)
         var key2 = choose(out)
+        rounds++;
         initPic(bases[key2], key)
       }
       else {
