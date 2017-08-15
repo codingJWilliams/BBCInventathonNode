@@ -30,72 +30,6 @@
   <script src="color.js"></script>
 
   <body style="background-color: transparent;">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-3"></div>
-        <div class="col-xs-6">
-          <div class="panel panel-primary">
-            <div class="panel-heading"> Options </div>
-            <div class="panel-body">
-              <table class="table">
-                <tr>
-                  <td>
-                    Your Nickname
-                  </td>
-                  <td>
-                    <input type="text" id="nick" style="color: black">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Keys: (Like KeyW or Digit2)
-                  </td>
-                  <td>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Banana
-                  </td>
-                  <td>
-                    <input type="text" id="banana" style="color: black">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Lemon
-                  </td>
-                  <td>
-                    <input type="text" id="lemon" style="color: black">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Orange
-                  </td>
-                  <td>
-                    <input type="text" id="orange" style="color: black">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Lime
-                  </td>
-                  <td>
-                    <input type="text" id="lime" style="color: black">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <button class="btn btn-success" onclick="startTheGame()"> Start Game! </button>
-                  </td>
-                </tr>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-3"></div>
-      </div>
-    </div>
     <center>
       <h1 class="words" style="font-family: captcha">
       </h1>
@@ -117,45 +51,58 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.css">
   <script>
-    var mappings = {                                                            // Mappings of keys to fruits
-      KeyA: "lemon",                                                            // TODO: Move to config?
-      KeyW: "banana",
-      KeyS: "lime",
-      KeyD: "orange"
-    }
-    var mappings = {}
-    function startTheGame() {
-      /*
-      This, basically, removes the html loading wheel and starts the game
-      */
-      $(".container-fluid").css({"display": "none"});
-      $("#banana").val() == "" ? mappings.Key1 = "banana" : mappings[$("#banana").val()] = "banana";
-      $("#lemon").val() == "" ? mappings.Key2 = "lemon" : mappings[$("#lemon").val()] = "lemon";
-      $("#lime").val() == "" ? mappings.Key3 = "lime" : mappings[$("#lime").val()] = "lime";
-      $("#orange").val() == "" ? mappings.Key4 = "orange" : mappings[$("#orange").val()] = "orange";
-      $(".words").css({"display": "inline"})
-      initPic(bases[choose(out)], choose(out))                                  // Set a random background and text
-    }
-    var bases = {
-      lemon: "url('lemons-base.jpg')",                                          // Links to fruits
-      banana: "url('banana-base.jpg')",
-      lime: "url('lime-base.jpg')",
-      orange: "url('orange-base.jpg')"
-    }
+    var fruits = [
+      {
+        name: "Lemon",
+        pics: ["url('lemon1.jpg')", "url('lemon2.jpg')", "url('lemon3.jpg')", "url('lemon4.jpg')"],
+        key: "KeyL"
+      },
+      {
+        name: "Banana",
+        pics: ["url('banana1.jpg')", "url('banana2.jpg')", "url('banana3.jpg')", "url('banana4.jpg')"],
+        key: "KeyB"
+      },
+      {
+        name: "Lime",
+        pics: ["url('lime1.jpg')", "url('lime2.jpg')", "url('lime3.jpg')", "url('lime4.jpg')"],
+        key: "KeyI"
+      },
+      {
+        name: "Orange",
+        pics: ["url('orange1.jpg')", "url('orange2.jpg')", "url('orange3.jpg')", "url('orange4.jpg')"],
+        key: "KeyO"
+      }
+    ]
     var out = [];                                                               // Initialise array of names of fruits
-    for (key in bases){                                                         // Go throught fruit objects
-      if (!bases.hasOwnProperty(key)) continue;                                 // If the current iteration is on a builtin property to a prototype, skip
-      out.push(key)                                                             // Else, add the name of fruit to Array
-      color(bases[key].replace("url('", "").replace("')", ""))
-      color(bases[key].replace("url('", "").replace("')", ""))                  // HACK: Preload the image so it won't be black on first attempt
+    var mappings = {};
+    for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
+      out.push(fruits[i].name)                                                             // Else, add the name of fruit to Array
+      console.log(fruits[i].pics)
+      for (var a = 0; a < fruits[i].pics.length; a++) {                                // HACK: Preload the image so it won't be black on first attempt
+        console.log("LOL")
+        color(fruits[i].pics[a].replace("url('", "").replace("')", ""))
+        console.log(fruits[i].pics[a].replace("url('", "").replace("')", ""))
+      }
+      mappings[fruits[i].key] = fruits[i].name;
     }
+    var current = {};
+    function getImageFromName(name) {
+      var out = {};                                                               // Initialise array of names of fruits
+      for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
+        out[fruits[i].name] = choose(fruits[i].pics)
+      }
+      return out[name]
+    }
+    setTimeout(function(){
+      initPic(getImageFromName(choose(out)), choose(out))                                  // Set a random background and text
+    }, 200)
 
     function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
       return choices[index];
     }
     function randomMove(elem){                                                  // Takes a jQuery element like $(".words") and puts it in a random location
-      var posx = (Math.random() * ($(document).width() - 200)).toFixed();       // Chooses a random x
+      var posx = (Math.random() * ($(document).width() - 300)).toFixed();       // Chooses a random x
       var posy = (Math.random() * ($(document).height() - 50)).toFixed();       // Chooses a random Y
       elem.css({                                                                // Sets the css of the element
         'position':'absolute',                                                  // To the absolute position of x and y
@@ -164,7 +111,7 @@
         'display':'inline'
       })
     }
-    var current = {};
+
 
     function initPic(pic, word) {                                               // Function that sets the background and word
       $("html").css("background-image", pic);                                   // TODO: Random location for word?
@@ -211,7 +158,7 @@
         });
       })
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
-    }, 21000)
+    }, 60000)
 
     var rounds = 0;                                                             // Start at 0 wins
 
@@ -223,7 +170,7 @@
         var key = choose(out)                                                   // Then pick two random fruits
         var key2 = choose(out)                                                  // ^
         rounds++;                                                               // Add 1 to the win counter
-        initPic(bases[key2], key)                                               // And set the background and text to those random fruits
+        initPic(getImageFromName(key2), key)                                               // And set the background and text to those random fruits
       }
       else {
       }
