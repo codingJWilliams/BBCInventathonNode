@@ -33,16 +33,18 @@
       <h1 class="win2" style="display: none">
       </h1>
       <center class="sboard" style="display: none">
-        <ul class="list-group" style="width: 30em">
-          <li class="list-group-item">
+        <ul class="list-group leaderboard" style="width: 30em">
+          <!--li class="list-group-item">
             Jay Williams - 39
-          </li>
+          </li-->
         </ul>
       </center>
     </center>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="bower_components/sweetalert2/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="bower_components/sweetalert2/dist/sweetalert2.min.css">
   <script>
     var bases = {
       lemon: "url('lemons-base.jpg')",
@@ -80,6 +82,37 @@
       $(".words").fadeOut()
       $(".win2").text("You scored " + rounds + " points.")
       $(".win2").fadeIn()
+      $(".sboard").fadeIn()
+      swal({
+        title: 'What\'s your name?',
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: false
+      }).then(function (name) {
+        $.ajax({
+          url: '/add-score/',
+          type: 'post',
+          data: {
+              access_token: 'XXXXXXXXXXXXXXXXXXX'
+          },
+          headers: {
+              "XName": name,
+              "XScore": rounds
+          },
+          dataType: 'json',
+          success: function (data) {
+              console.info(data);
+          }
+        });
+      })
+      $.get("/get-score/", function (d) {
+        var arr = JSON.parse(d);
+        for (var i = 0; i < arr.length ; i++) {
+          $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>")
+        }
+      })
       document.onkeyup = function () {};
     }, 6000)
 

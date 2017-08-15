@@ -16,8 +16,8 @@ function saveLeaderboard(data){
 function getTopLeaderboard(callback1){
   getLeaderboard(function (data) {
     callback1(data.sort(function (a, b) {
-      if (a.score < b.score) { return -1; };
-      if (a.score > b.score) { return 1; };
+      if (a.score > b.score) { return -1; };
+      if (a.score < b.score) { return 1; };
       return 0; }).slice(0, 20)
     )
   }
