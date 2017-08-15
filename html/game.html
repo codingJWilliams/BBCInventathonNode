@@ -16,9 +16,39 @@
     -o-background-size: cover;
     background-size: cover;
   }
+  input[type=text] {
+    border-radius: 10px;
+  }
   @font-face {
     font-family: captcha;
     src: url("capcha.ttf");
+  }
+  /* Center the loader */
+  #loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   </style>
   <!-- Latest compiled and minified CSS -->
@@ -27,9 +57,29 @@
   <script src="color.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <body style="background-color: transparent;">
+    <div id="loader"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading"> Options </div>
+            <div class="panel-body">
+              Your Nickname                       | <input type="text" id="nick"><br>
+              Key Names (Like Digit5 or KeyW)<br>
+              Banana                              | <input type="text" id="banana"><br>
+              Lemon                               | <input type="text" id="lemon"><br>
+              Lime                                | <input type="text" id="lime"><br>
+              Orange                              | <input type="text" id="orange"><br>
+              <button class="btn btn-success"> Start Game! </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4"></div>
+      </div>
+    </div>
     <center>
-      <br>
-      <br>
+      </ul>
       <h1 class="words" style="font-family: captcha">
 
       </h1>
@@ -50,9 +100,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.css">
   <script>
+    var myVar;
+    myVar = setTimeout(showPage, 1000);                                         // 1000 seconds after the page loads, run showPage()
+
+    function showPage() {
+      /*
+      This, basically, removes the html loading wheel and starts the game
+      */
+      document.getElementById("loader").style.display = "none";                 // Remove loading wheel
+      initPic(bases[choose(out)], choose(out))                                  // Set a random background and text
+    }
     var bases = {
       lemon: "url('lemons-base.jpg')",                                          // Links to fruits
-      bannana: "url('bannana-base.jpg')",
+      banana: "url('banana-base.jpg')",
       lime: "url('lime-base.jpg')",
       orange: "url('orange-base.jpg')"
     }
@@ -63,6 +123,7 @@
       color(bases[key].replace("url('", "").replace("')", ""))
       color(bases[key].replace("url('", "").replace("')", ""))                  // HACK: Preload the image so it won't be black on first attempt
     }
+
     function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
       return choices[index];
@@ -79,7 +140,7 @@
     }
     var mappings = {                                                            // Mappings of keys to fruits
       KeyA: "lemon",                                                            // TODO: Move to config?
-      KeyW: "bannana",
+      KeyW: "banana",
       KeyS: "lime",
       KeyD: "orange"
     }
@@ -130,10 +191,10 @@
         });
       })
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
-    }, 20000)
+    }, 21000)
 
     var rounds = 0;                                                             // Start at 0 wins
-    initPic(bases[choose(out)], choose(out))                                    // Set a random background and text
+
 
     document.onkeyup = function (e) {                                           // When someone lets go of a key
       var mapped = mappings[e.code]                                             // Get the key from "mappings", which was defined earlier
