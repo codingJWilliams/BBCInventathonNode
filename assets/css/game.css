@@ -1,0 +1,23 @@
+h1 {
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 49px;
+  font-style: normal;
+  font-variant: normal;
+  color: white;
+  font-weight: 500;
+  line-height: 53.9px;
+}
+html {
+  background: url("") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+input {
+  color: black;
+}
+@font-face {
+  font-family: captcha;
+  src: url("capcha.ttf");
+}
