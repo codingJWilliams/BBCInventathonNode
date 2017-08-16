@@ -95,7 +95,7 @@
     }, 100)
 
     for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
-      out.push(fruits[i].name)                                                             // Else, add the name of fruit to Array
+      out.push(fruits[i].name)                                                  // Else, add the name of fruit to Array
       console.log(fruits[i].pics)
       mappings[fruits[i].key] = fruits[i].name;
     }
@@ -104,8 +104,8 @@
       if (name.startsWith("url")){
         return name
       }
-      var out = {};                                                               // Initialise array of names of fruits
-      for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
+      var out = {};                                                             // Initialise array of names of fruits
+      for (var i = 0; i < fruits.length; i++){                                  // Go throught fruit objects
         out[fruits[i].name] = choose(fruits[i].pics)
       }
       return out[name]
@@ -114,7 +114,7 @@
       initPic(getImageFromName(choose(out)), choose(out))                        // Set a random background and text
     }, 200)
 
-    function choose(choices) {                                           // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
+    function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
       return choices[index];
     }
@@ -200,11 +200,11 @@
         if (correct >= 40 && correct <= 42) {
           initPic("url('legendary.png')", key)
         } else {
-          initPic(getImageFromName(key2), key)                                               // And set the background and text to those random fruits
+          initPic(getImageFromName(key2), key)                                  // And set the background and text to those random fruits
         }
       } else {
-        incorrect = incorrect + 1;
-        $("#scorecount").text(correct - incorrect)
+        incorrect = incorrect + 1;                                              // If the fruit is wrong, add one to the incorrect score
+        $("#scorecount").text(correct - incorrect)                              // And update visual counter
       }
 
 
