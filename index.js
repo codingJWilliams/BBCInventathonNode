@@ -37,9 +37,15 @@ function saveToLeaderboard(name, score){                                        
 app.get('/', function(req, res){                                                // On someone requesting the homepage
   res.sendFile(__dirname + '/html/game.html');                                  // Send them the "game.html" file
 });
+app.post("/clear-leaderboard/", function (req, res) {                           // I have an IFTTT set up to call this at 1:pm every day
+  saveLeaderboard([])
+  res.end('{"done": true}')
+})
 app.post("/add-score/", function(req, res){                                     // On someone triggering add-score
-  console.log(req.body.name, req.body.score)                                    // Log their name and score
-  saveToLeaderboard(req.body.name, parseInt(req.body.score));                   // Then parse their score and save it
+  var name = req.body.name                                                      // Store name
+  var score = parseInt(req.body.score)                                          // Store score
+  console.log(name, score, typeof score)                                        // Log their name and score
+  saveToLeaderboard(name, score);                                               // Then parse their score and save it
   res.end('{"done": true}')                                                     // Reply with success
 })
 app.get("/get-score/", function(req, res) {                                     // On someone requesting the leaderboard

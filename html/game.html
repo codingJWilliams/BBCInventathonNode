@@ -167,6 +167,7 @@
           console.info(data);
           $.get("/get-score/", function (d) {                                   // Download the updated scoreboard
             var arr = JSON.parse(d);                                            // Parse what we've been given
+            $(".leaderboard").html("")                                          // Remove old scores
             for (var i = 0; i < arr.length ; i++) {                             // Go through all the top 20 scores
               $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
             }
