@@ -55,22 +55,22 @@
       {
         name: "Lemon",
         pics: ["url('lemon1.jpg')", "url('lemon2.jpg')", "url('lemon3.jpg')", "url('lemon4.jpg')"],
-        key: "KeyL"
+        key: "Digit2"
       },
       {
         name: "Banana",
         pics: ["url('banana1.jpg')", "url('banana2.jpg')", "url('banana3.jpg')", "url('banana4.jpg')"],
-        key: "KeyB"
+        key: "Digit1"
       },
       {
         name: "Lime",
         pics: ["url('lime1.jpg')", "url('lime2.jpg')", "url('lime3.jpg')", "url('lime4.jpg')"],
-        key: "KeyI"
+        key: "Digit4"
       },
       {
         name: "Orange",
         pics: ["url('orange1.jpg')", "url('orange2.jpg')", "url('orange3.jpg')", "url('orange4.jpg')"],
-        key: "KeyO"
+        key: "Digit3"
       }
     ]
     var out = [];                                                               // Initialise array of names of fruits
@@ -87,6 +87,9 @@
     }
     var current = {};
     function getImageFromName(name) {
+      if (name.startsWith("url")){
+        return name
+      }
       var out = {};                                                               // Initialise array of names of fruits
       for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
         out[fruits[i].name] = choose(fruits[i].pics)
@@ -94,10 +97,10 @@
       return out[name]
     }
     setTimeout(function(){
-      initPic(getImageFromName(choose(out)), choose(out))                                  // Set a random background and text
+      initPic(getImageFromName(choose(out)), choose(out))                        // Set a random background and text
     }, 200)
 
-    function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
+    function choose(choices) {                                           // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
       return choices[index];
     }
@@ -116,6 +119,13 @@
     function initPic(pic, word) {                                               // Function that sets the background and word
       $("html").css("background-image", pic);                                   // TODO: Random location for word?
       $(".words").text(word);
+      var rARE = Math.random;
+      console.log(rARE)
+      if (rARE > 0.9) {
+
+        console.log("Yay")
+        pic = "url('legendary.png')"
+      }
       $(".words").css("color", color(pic.replace("url('", "").replace("')", "")));
       randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
