@@ -1,6 +1,7 @@
 function color(imgSrc, isDarkImg) {                                             // For given image source, returns eg rgb(20, 30, 40) with average color of image
   var img = document.createElement('img');                                      // Takes "isDarkImg"; if true it will return lighter value
-  img.src = imgSrc;
+  console.log(imgSrc)
+  img.src = "/" + imgSrc;
   img.width = 1000;
   img.height = 1000;
   var rgb = getAverageRGB(img);
@@ -29,8 +30,8 @@ function getAverageRGB(imgEl) {                                                 
       b: 0
     },
     count = 0;
-
   if (!context) {
+    console.log("Returning default")
     return defaultRGB;
   }
 

@@ -19,5 +19,5 @@ input {
 }
 @font-face {
   font-family: captcha;
-  src: url("capcha.ttf");
+  src: url("/capcha.ttf");
 }

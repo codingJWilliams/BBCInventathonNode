@@ -19,8 +19,8 @@
 
       <h1 class="win2" style="display: none"></h1>                          <!--// Create the element that displays "You got xx points!" and make invis-->
 
-      <center class="sboard" style="display: none">
-        <ul class="list-group leaderboard" style="width: 30em">
+      <center class="sboard" style="display: none">                         <!--// Create a centered element to hold a  -->
+        <ul class="list-group leaderboard" style="width: 30em">             <!--// List of top scores -->
           <!--li class="list-group-item">
             Jay Williams - 39
           </li-->
@@ -28,7 +28,12 @@
       </center>
     </center>
   </body>
-
+  <!--                                                                          // Begin JS imports -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="js/nanobar.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
+  <!--                                                                          // End JS imports -->
   <script>
     var fruits = [
       {
@@ -120,7 +125,10 @@
         console.log("Yay")
         pic = "url('legendary.png')"
       }
-      $(".words").css("color", color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1));
+      color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1)
+      color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1)
+      var correctColor = color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1)
+      $(".words").css("color", correctColor);
       randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
       current.word = word;
