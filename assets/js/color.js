@@ -1,15 +1,14 @@
-function color(imgSrc, isDarkImg) { // For given image source, returns eg rgb(20, 30, 40) with average color of image
-  var img = document.createElement('img');
+function color(imgSrc, isDarkImg) {                                             // For given image source, returns eg rgb(20, 30, 40) with average color of image
+  var img = document.createElement('img');                                      // Takes "isDarkImg"; if true it will return lighter value
   img.src = imgSrc;
   img.width = 1000;
   img.height = 1000;
-  console.log(img)
   var rgb = getAverageRGB(img);
   return "rgb(" + Math.floor(convertRange(rgb.r, [0, 255], isDarkImg ? [80, 255] : [0, 200])) + ", " + Math.floor(convertRange(rgb.g, [0, 255], isDarkImg ? [80, 255] : [0, 200])) + ", " + Math.floor(convertRange(rgb.b, [0, 255], isDarkImg ? [80, 255] : [0, 200])) + ")"
 }
 
-function convertRange(value, r1, r2) {
-  return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
+function convertRange(value, r1, r2) {                                          // Takes a value within given range r1, eg 20 in [0, 100]
+  return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];           // And returns that value scaled to r2, eg [0, 200] => 40
 }
 
 function getAverageRGB(imgEl) {
