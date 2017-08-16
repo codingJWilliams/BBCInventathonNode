@@ -180,7 +180,11 @@
         var key = choose(out)                                                   // Then pick two random fruits
         var key2 = choose(out)                                                  // ^
         rounds++;                                                               // Add 1 to the win counter
-        initPic(getImageFromName(key2), key)                                               // And set the background and text to those random fruits
+        if (rounds >= 40 && rounds <= 42) {
+          initPic("url('legendary.png')", key)
+        } else {
+          initPic(getImageFromName(key2), key)                                               // And set the background and text to those random fruits
+        }
       }
       else {
       }
