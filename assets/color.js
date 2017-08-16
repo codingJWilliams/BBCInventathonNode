@@ -1,4 +1,4 @@
-function getColor(imgSrc, isDarkImg, cb){
+function getColor(imgSrc, isDarkImg, cb){                                       // Takes: an image url. Returns, eg: "rgb(103, 78, 21)"
   var img = document.createElement("img");
   img.src = imgSrc;
   img.onload = function() {
@@ -7,7 +7,7 @@ function getColor(imgSrc, isDarkImg, cb){
     cb("rgb(" + Math.floor(convertRange(rgb.r, [ 0, 255 ], isDarkImg ? [0, 255] : [ 0, 200 ] )) + ", " + Math.floor(convertRange(rgb.g, [ 0, 255 ], isDarkImg ? [0, 255] : [ 0, 200 ] )) + ", " + Math.floor(convertRange(rgb.b, [ 0, 255 ], isDarkImg ? [0, 255] : [ 0, 200 ] )) + ")");
   }
 }
-function convertRange( value, r1, r2 ) {
+function convertRange( value, r1, r2 ) {                                        // Scales a value to a range
   return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
 }
 function getAverageColor(img) {
