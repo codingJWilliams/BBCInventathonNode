@@ -130,18 +130,13 @@
 
 
     function initPic(pic, word) {                                               // Function that sets the background and word
-      $("html").css("background-image", pic);
-      $(".words").text(word);
-      var rARE = Math.random;
-      if (rARE > 0.9) {
-        console.log("Yay")
-        pic = "url('legendary.png')"
-      }
-      setTimeout(function () {
-        getColor(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1, function (correctColor) {
-          $(".words").css("color", correctColor);
+      $("html").css("background-image", pic);                                   // Set page background to pic
+      $(".words").text(word);                                                   // Set "words" element to the name of what you gotta click
+      setTimeout(function () {                                                  // After 70ms, so that the background loads first
+        getColor(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1, function (correctColor) { // Get the average image color
+          $(".words").css("color", correctColor);                               // Then set the word's color to it
         })
-      }, 150)
+      }, 70)
       randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
       current.word = word;
@@ -165,7 +160,7 @@
         $.ajax({                                                                // TODO: This method is a bit hacky HACK
           url: '/add-score/',                                                   // Make a web request to index.js with
           type: 'post',
-          data: {},
+          data: {"name": name, "score": (correct - incorrect)},
           headers: {
               "XName": name,                                                    // The data name and score, where name is what the user put in the box
               "XScore": (correct - incorrect)
@@ -196,7 +191,7 @@
         var key2 = choose(out)                                                  // ^
         correct++;                                                               // Add 1 to the win counter
         $("#scorecount").text(correct - incorrect)
-        if (correct >= 40 && correct <= 42) {
+        if ((correct - incorrect) >= 40 && (correct - incorrect) <= 42) {
           initPic("url('legendary.png')", key)
         } else {
           initPic(getImageFromName(key2), key)                                  // And set the background and text to those random fruits

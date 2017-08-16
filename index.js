@@ -1,6 +1,12 @@
 var app = require('express')();                                                 // Import web framework
 var http = require('http').Server(app);                                         // Import HTTP library and init it with web framework
 const fs = require('fs');                                                       // Import FileSystem to save leaderboards
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 function getLeaderboard(callback) {                                             // This reads in the leaderboard and calls "callback([{name: Jay, score: 10}, {name: Dude, score: 20}])"
   fs.readFile('storage/leaderboard.json', "utf8", function(err, data) {
@@ -32,8 +38,8 @@ app.get('/', function(req, res){                                                
   res.sendFile(__dirname + '/html/game.html');                                  // Send them the "game.html" file
 });
 app.post("/add-score/", function(req, res){                                     // On someone triggering add-score
-  console.log(req.headers.xname, req.headers.xscore)                            // Log their name and score
-  saveToLeaderboard(req.headers.xname, parseInt(req.headers.xscore));           // Then parse their score and save it
+  console.log(req.body.name, req.body.score)                                    // Log their name and score
+  saveToLeaderboard(req.body.name, parseInt(req.body.score));                   // Then parse their score and save it
   res.end('{"done": true}')                                                     // Reply with success
 })
 app.get("/get-score/", function(req, res) {                                     // On someone requesting the leaderboard
