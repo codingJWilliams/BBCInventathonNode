@@ -1,3 +1,6 @@
+/*
+Most of this is taken off the internet coz my solution was bloody awful
+*/
 function getColor(imgSrc, isDarkImg, cb){                                       // Takes: an image url. Returns, eg: "rgb(103, 78, 21)"
   var img = document.createElement("img");
   img.src = imgSrc;
@@ -10,7 +13,7 @@ function getColor(imgSrc, isDarkImg, cb){                                       
 function convertRange( value, r1, r2 ) {                                        // Scales a value to a range
   return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
 }
-function getAverageColor(img) {
+function getAverageColor(img) {                                                 // Gets the average color of an image element
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   var width = canvas.width = img.naturalWidth;
@@ -35,25 +38,4 @@ function getAverageColor(img) {
   b = Math.floor(b / (data.length / 4));
 
   return { r: r, g: g, b: b };
-}
-
-function rgbToHsl(r, g, b) {
-  r /= 255; g /= 255; b /= 255;
-  var max = Math.max(r, g, b), min = Math.min(r, g, b);
-  var h, s, l = (max + min) / 2;
-
-  if (max == min) {
-    h = s = 0; // achromatic
-  } else {
-    var d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-
-  return { h: h, s: s, l: l };
 }
