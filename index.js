@@ -38,7 +38,7 @@ app.get('/', function(req, res){                                                
   res.sendFile(__dirname + '/html/game.html');                                  // Send them the "game.html" file
 });
 app.post("/clear-leaderboard/", function (req, res) {                           // I have an IFTTT set up to call this at 1:pm every day
-  saveLeaderboard([])
+  saveLeaderboard([])                                                           // Delete the leaderboard
   res.end('{"done": true}')
 })
 app.post("/add-score/", function(req, res){                                     // On someone triggering add-score
