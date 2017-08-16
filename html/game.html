@@ -95,9 +95,8 @@
     }, 100)
 
     for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
-      out.push(fruits[i].name)                                                  // Else, add the name of fruit to Array
-      console.log(fruits[i].pics)
-      mappings[fruits[i].key] = fruits[i].name;
+      out.push(fruits[i].name)                                                  // add the name of fruit to Array
+      mappings[fruits[i].key] = fruits[i].name;                                 // Create a mappings object with {KeyB: "Bannana"} etc
     }
     var current = {};
     function getImageFromName(name) {
