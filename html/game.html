@@ -29,7 +29,9 @@
   <!-- Latest compiled and minified JavaScript -->
   <script src="color.js"></script>
 
-  <body style="background-color: transparent;">
+  <body style="background-color: transparent;" id="tehbody">
+    <h1 id="scorecount" style="color: black; padding-left: 20px">
+    </h1>
     <center>
       <h1 class="words" style="font-family: captcha">
       </h1>
@@ -48,6 +50,7 @@
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="js/nanobar.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.css">
   <script>
@@ -75,6 +78,21 @@
     ]
     var out = [];                                                               // Initialise array of names of fruits
     var mappings = {};
+    var options = {
+      id: 'my-id',
+      target: document.getElementById('tehbody')
+    };
+
+    var nanobar = new Nanobar( options );
+    var b = 0;
+    var meee = setInterval(function () {
+      b++
+      nanobar.go( Math.round( (b / 600 ) * 100 ) )
+      if(b > 600) {
+        clearInterval(meee)
+      }
+    }, 100)
+
     for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
       out.push(fruits[i].name)                                                             // Else, add the name of fruit to Array
       console.log(fruits[i].pics)
@@ -126,7 +144,7 @@
         console.log("Yay")
         pic = "url('legendary.png')"
       }
-      $(".words").css("color", color(pic.replace("url('", "").replace("')", "")));
+      $(".words").css("color", color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1));
       randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
       current.word = word;
@@ -136,7 +154,7 @@
       $("html").css("background-image", "");                                    // Remove background image
       $("html").css("background-color", "black");                               // Set the background black
       $(".words").remove()                                                      // Remove the current word (ie banana)
-      $(".win2").text("You scored " + rounds + " points.")                      // Set winning text
+      $(".win2").text("You scored " + (correct - incorrect) + " points.")       // Set winning text
       $(".win2").fadeIn()                                                       // Fade in the winning text
       $(".sboard").fadeIn()                                                     // Fade in the scoreboard
       swal({                                                                    // Create a dialog box:
@@ -153,7 +171,7 @@
           data: {},
           headers: {
               "XName": name,                                                    // The data name and score, where name is what the user put in the box
-              "XScore": rounds
+              "XScore": (correct - incorrect)
           },
           dataType: 'json',
           success: function (data) {                                            // Then when that data is successfully sent
@@ -170,8 +188,8 @@
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
     }, 60000)
 
-    var rounds = 0;                                                             // Start at 0 wins
-
+    var correct = 0;                                                             // Start at 0 wins
+    var incorrect = 0
 
     document.onkeyup = function (e) {                                           // When someone lets go of a key
       var mapped = mappings[e.code]                                             // Get the key from "mappings", which was defined earlier
@@ -179,14 +197,16 @@
       if (mapped == current.word) {                                             // If the key is the correct one TODO: Count incorrect keys
         var key = choose(out)                                                   // Then pick two random fruits
         var key2 = choose(out)                                                  // ^
-        rounds++;                                                               // Add 1 to the win counter
-        if (rounds >= 40 && rounds <= 42) {
+        correct++;                                                               // Add 1 to the win counter
+        $("#scorecount").text(correct - incorrect)
+        if (correct >= 40 && correct <= 42) {
           initPic("url('legendary.png')", key)
         } else {
           initPic(getImageFromName(key2), key)                                               // And set the background and text to those random fruits
         }
-      }
-      else {
+      } else {
+        incorrect = incorrect + 1;
+        $("#scorecount").text(correct - incorrect)
       }
 
 
