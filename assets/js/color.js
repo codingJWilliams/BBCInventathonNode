@@ -11,7 +11,7 @@ function convertRange(value, r1, r2) {                                          
   return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];           // And returns that value scaled to r2, eg [0, 200] => 40
 }
 
-function getAverageRGB(imgEl) {
+function getAverageRGB(imgEl) {                                                 // This function will return the average RGB of an html element
   var blockSize = 5, // only visit every 5 pixels
     defaultRGB = {
       r: 0,
