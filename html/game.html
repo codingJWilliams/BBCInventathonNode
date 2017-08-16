@@ -1,5 +1,4 @@
 <html>
-  <script src="js/color.js"></script>
   <head>
     <title>
       Fruit punch!
@@ -12,6 +11,23 @@
   </head>
 
   <body style="background-color: transparent;" id="tehbody">
+    <!-- HACK: Preload images -->
+    <img src="lemon1.jpg" style="display:none;" alt="" />
+    <img src="lemon2.jpg" style="display:none;" alt="" />
+    <img src="lemon3.jpg" style="display:none;" alt="" />
+    <img src="lemon4.jpg" style="display:none;" alt="" />
+    <img src="banana1.jpg" style="display:none;" alt="" />
+    <img src="banana2.jpg" style="display:none;" alt="" />
+    <img src="banana3.jpg" style="display:none;" alt="" />
+    <img src="banana4.jpg" style="display:none;" alt="" />
+    <img src="lime1.jpg" style="display:none;" alt="" />
+    <img src="lime2.jpg" style="display:none;" alt="" />
+    <img src="lime3.jpg" style="display:none;" alt="" />
+    <img src="lime4.jpg" style="display:none;" alt="" />
+    <img src="orange1.jpg" style="display:none;" alt="" />
+    <img src="orange2.jpg" style="display:none;" alt="" />
+    <img src="orange3.jpg" style="display:none;" alt="" />
+    <img src="orange4.jpg" style="display:none;" alt="" />
     <h1 id="scorecount" style="color: black; padding-left: 20px"> </h1>     <!--// Create the score count display element -->
     <center>
       <h1 class="words" style="font-family: captcha"></h1>                  <!--
@@ -32,6 +48,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <script src="js/nanobar.min.js" crossorigin="anonymous"></script>
+  <script src="color.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
   <!--                                                                          // End JS imports -->
   <script>
@@ -77,11 +94,6 @@
     for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
       out.push(fruits[i].name)                                                             // Else, add the name of fruit to Array
       console.log(fruits[i].pics)
-      for (var a = 0; a < fruits[i].pics.length; a++) {                                // HACK: Preload the image so it won't be black on first attempt
-        console.log("LOL")
-        color(fruits[i].pics[a].replace("url('", "").replace("')", ""))
-        console.log(fruits[i].pics[a].replace("url('", "").replace("')", ""))
-      }
       mappings[fruits[i].key] = fruits[i].name;
     }
     var current = {};
@@ -119,16 +131,15 @@
       $("html").css("background-image", pic);                                   // TODO: Random location for word?
       $(".words").text(word);
       var rARE = Math.random;
-      console.log(rARE)
       if (rARE > 0.9) {
-
         console.log("Yay")
         pic = "url('legendary.png')"
       }
-      color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1)
-      color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1)
-      var correctColor = color(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1)
-      $(".words").css("color", correctColor);
+      setTimeout(function () {
+        getColor(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1, function (correctColor) {
+          $(".words").css("color", correctColor);
+        })
+      }, 150)
       randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
       current.word = word;
