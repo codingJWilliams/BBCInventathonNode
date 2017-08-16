@@ -100,14 +100,14 @@
     }
     var current = {};
     function getImageFromName(name) {
-      if (name.startsWith("url")){
-        return name
+      if (name.startsWith("url")){                                              // Special Case Code; If name is "url('legendary.png')", ie trump,
+        return name                                                             // Just return the readymade url
       }
-      var out = {};                                                             // Initialise array of names of fruits
+      var out = {};                                                             // Initialise object
       for (var i = 0; i < fruits.length; i++){                                  // Go throught fruit objects
-        out[fruits[i].name] = choose(fruits[i].pics)
-      }
-      return out[name]
+        out[fruits[i].name] = choose(fruits[i].pics)                            // Fill the object with {bannana: "url(randombannanabic)"}
+      }                                                                         // TODO: Why is this method so HACK y? It doesn't need to be
+      return out[name]                                                          // Return the choice from the array
     }
     setTimeout(function(){
       initPic(getImageFromName(choose(out)), choose(out))                        // Set a random background and text
