@@ -149,6 +149,12 @@
       $(".win2").text("You scored " + (correct - incorrect) + " points.")       // Set winning text
       $(".win2").fadeIn()                                                       // Fade in the winning text
       $(".sboard").fadeIn()                                                     // Fade in the scoreboard
+      $.get("/get-score/", function (d) {                                       // Download the updated scoreboard
+        var arr = JSON.parse(d);                                                // Parse what we've been given
+        for (var i = 0; i < arr.length ; i++) {                                 // Go through all the top 20 scores
+          $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
+        }
+      })
       swal({                                                                    // Create a dialog box:
         title: 'What\'s your name?',
         input: 'text',                                                          // With an input box
@@ -157,26 +163,16 @@
         showLoaderOnConfirm: true,
         allowOutsideClick: false
       }).then(function (name) {                                                 // Then when user clicks submit
-        $.ajax({                                                                // TODO: This method is a bit hacky HACK
-          url: '/add-score/',                                                   // Make a web request to index.js with
-          type: 'post',
-          data: {"name": name, "score": (correct - incorrect)},
-          headers: {
-              "XName": name,                                                    // The data name and score, where name is what the user put in the box
-              "XScore": (correct - incorrect)
-          },
-          dataType: 'json',
-          success: function (data) {                                            // Then when that data is successfully sent
-              console.info(data);
-              $.get("/get-score/", function (d) {                               // Download the updated scoreboard
-                var arr = JSON.parse(d);                                        // Parse what we've been given
-                for (var i = 0; i < arr.length ; i++) {                         // Go through all the top 20 scores
-                  $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
-                }
-              })
-          }
-        });
-      })
+        $.post("/add-score/", {name: name, score: (correct - incorrect)}, function (data) { // Then when that data is successfully sent
+          console.info(data);
+          $.get("/get-score/", function (d) {                                   // Download the updated scoreboard
+            var arr = JSON.parse(d);                                            // Parse what we've been given
+            for (var i = 0; i < arr.length ; i++) {                             // Go through all the top 20 scores
+              $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
+            }
+          })
+        })
+      });
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
     }, 60000)
 
