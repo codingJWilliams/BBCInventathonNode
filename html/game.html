@@ -30,7 +30,7 @@
     <img src="orange2.jpg" style="display:none;" alt="" />
     <img src="orange3.jpg" style="display:none;" alt="" />
     <img src="orange4.jpg" style="display:none;" alt="" />
-
+    <div id="dummy" style="display: none;"></div>
     <h1 id="scorecount" style="color: black; padding-left: 20px"> </h1>     <!--// Create the score count display element -->
     <center>
       <h1 class="words" style="font-family: captcha"></h1>                  <!--
@@ -74,16 +74,21 @@
       {
         name: "Orange",
         pics: ["url('orange1.jpg')", "url('orange2.jpg')", "url('orange3.jpg')", "url('orange4.jpg')"],
-        key: "Digit3"
+        key: "KeyO"
       }
     ]
+    var soundUrl = "https://freesound.org/people/LittleRainySeasons/sounds/335908/download/335908__littlerainyseasons__correct.mp3";
+    var badSound = "https://freesound.org/people/RICHERlandTV/sounds/216090/download/216090__richerlandtv__bad-beep-incorrect.mp3";
     var out = [];                                                               // Initialise array of names of fruits
     var mappings = {};
     var options = {
       id: 'my-id',
       target: document.getElementById('tehbody')
     };
-
+    function playSound(soundfile) {                                             // This will play an mp3
+      var snd = new Audio(soundfile);
+      snd.play()
+    }
     var nanobar = new Nanobar( options );
     var b = 0;
     var meee = setInterval(function () {
@@ -188,12 +193,14 @@
         var key2 = choose(out)                                                  // ^
         correct++;                                                               // Add 1 to the win counter
         $("#scorecount").text(correct - incorrect)
+        playSound(soundUrl);
         if ((correct - incorrect) >= 40 && (correct - incorrect) <= 42) {
           initPic("url('legendary.png')", key)
         } else {
           initPic(getImageFromName(key2), key)                                  // And set the background and text to those random fruits
         }
       } else {
+        playSound(badSound)
         incorrect = incorrect + 1;                                              // If the fruit is wrong, add one to the incorrect score
         $("#scorecount").text(correct - incorrect)                              // And update visual counter
       }
