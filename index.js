@@ -2,6 +2,7 @@ var app = require('express')();                                                 
 var http = require('http').Server(app);                                         // Import HTTP library and init it with web framework
 const fs = require('fs');                                                       // Import FileSystem to save leaderboards
 var bodyParser = require('body-parser')
+var request = require('request');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -27,10 +28,14 @@ function getTopLeaderboard(callback1){                                          
 )
 }
 function saveToLeaderboard(name, score){                                        // Saves a name and score to leaderboard
-  getLeaderboard(function(data){                                                // First gets leaderboard
-    data.push({"name": name, "score": score})                                   // Then adds an object with {name: "Jay", score: 69}
-    console.log(data)                                                           // Logs for troubleshooting
-    saveLeaderboard(data)                                                       // Saves the data
+  request('http://www.purgomalum.com/service/json?text=' + name.replace(" ", "+"), function (error, response, body) {
+    console.log(body)
+    var censord = JSON.parse(body).result
+    getLeaderboard(function(data){                                              // First gets leaderboard
+      data.push({"name": censord, "score": score})                              // Then adds an object with {name: "Jay", score: 69}
+      console.log(data)                                                         // Logs for troubleshooting
+      saveLeaderboard(data)                                                     // Saves the data
+    })
   })
 }
 

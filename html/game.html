@@ -55,6 +55,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
   <!--                                                                          // End JS imports -->
   <script>
+    var demoMode = true;
+    if (demoMode) {
+      $(".words").css({ "border": "10px solid red"})
+    }
     var fruits = [
       {
         name: "Lemon",
@@ -170,13 +174,15 @@
       }).then(function (name) {                                                 // Then when user clicks submit
         $.post("/add-score/", {name: name, score: (correct - incorrect)}, function (data) { // Then when that data is successfully sent
           console.info(data);
-          $.get("/get-score/", function (d) {                                   // Download the updated scoreboard
-            var arr = JSON.parse(d);                                            // Parse what we've been given
-            $(".leaderboard").html("")                                          // Remove old scores
-            for (var i = 0; i < arr.length ; i++) {                             // Go through all the top 20 scores
-              $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
-            }
-          })
+          setTimeout(function () {
+            $.get("/get-score/", function (d) {                                   // Download the updated scoreboard
+              var arr = JSON.parse(d);                                            // Parse what we've been given
+              $(".leaderboard").html("")                                          // Remove old scores
+              for (var i = 0; i < arr.length ; i++) {                             // Go through all the top 20 scores
+                $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
+              }
+            })
+          }, 500)
         })
       });
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
