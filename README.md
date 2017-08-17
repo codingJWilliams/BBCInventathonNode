@@ -21,5 +21,5 @@ var fruits = [
   },
 ```
 
-Connect a wire from each arrow key to a fruit and then connect yourself to the ground. Open word or any text input and test which key each fruit is connected to. Then, where it says `key:  "Digit2"` and replace it with the correct digit for each fruit you have connected.
+Connect a wire from each arrow key to a fruit and then connect yourself to the ground. Open word or any text input and test which key each fruit is connected to. Then, in the places where it says `key:  "Digit2"` replace it with the respective key the fruit is connected to.
 Then, in your command line window, type "node index" and open "localhost:4000" with your favorite browser
