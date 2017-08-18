@@ -1,7 +1,7 @@
 # Fruit punch :punch:!
 ### Contributors
 * Lead Developer: `Jay Williams`
-* Junior Developers: `Nikash Chekuri` <img src="https://snusercontent.global.ssl.fastly.net/member-profile-full/44/4288444_8862847.jpg" width="50"> , `Gokul Menon`
+* Junior Developers: `Nikash Chekuri` , `Gokul Menon`
 * Tester: `Shaquille`
 * Alternative Developer: `Rory Sharp` [Solution in Python](https://github.com/codingJWilliams/BBCInventathon)
 ### What is this?
