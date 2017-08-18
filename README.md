@@ -1,7 +1,7 @@
 # Fruit punch :punch:!
 ### Contributors
 * Lead Developer: `Jay Williams`
-* Junior Developers: `Nikash Chekuri` <img src="https://snusercontent.global.ssl.fastly.net/member-profile-full/44/4288444_8862847.jpg" width="50"> , `Gokul Menon`
+* Junior Developers: `Nikash Chekuri` , `Gokul Menon`
 * Tester: `Shaquille`
 * Alternative Developer: `Rory Sharp` [Solution in Python](https://github.com/codingJWilliams/BBCInventathon)
 ### What is this?
@@ -9,7 +9,7 @@ This is a program designed to train your brain.
 An image appears of a crate of a certain type of fruit, for example limes, and you have to look for the camouflaged word and hit that fruit.
 ![Demo](https://jaywilliams.me/static/screencapture-localhost-4000-1502989254235.png)
 ### How do I set it up?
-First, set up a [Makey Makey](makeymakey.com) device and [remap](http://makeymakey.com/remap) the arrow keys to 1, 2, 3, and 4.
+First, set up a [Makey Makey](http://makeymakey.com) device and [remap](http://makeymakey.com/remap) the arrow keys to 1, 2, 3, and 4.
 
 Then, clone this repo to a folder and navigate there in a command prompt.
 
