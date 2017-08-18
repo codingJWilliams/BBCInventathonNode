@@ -9,7 +9,7 @@ This is a program designed to train your brain.
 An image appears of a crate of a certain type of fruit, for example limes, and you have to look for the camouflaged word and hit that fruit.
 ![Demo](https://jaywilliams.me/static/screencapture-localhost-4000-1502989254235.png)
 ### How do I set it up?
-First, set up a [Makey Makey](makeymakey.com) device and [remap](http://makeymakey.com/remap) the arrow keys to 1, 2, 3, and 4.
+First, set up a [Makey Makey](http://makeymakey.com) device and [remap](http://makeymakey.com/remap) the arrow keys to 1, 2, 3, and 4.
 
 Then, clone this repo to a folder and navigate there in a command prompt.
 
