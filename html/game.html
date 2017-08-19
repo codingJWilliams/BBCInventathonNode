@@ -1,4 +1,4 @@
-<html>
+<html style="background-color: rgb(0, 171, 255);">
   <head>
     <title>
       Fruit punch!
@@ -10,7 +10,31 @@
     <!--                                                                        // End CSS Imports -->
   </head>
 
-  <body style="background-color: transparent;" id="tehbody">
+  <body style="background-color: transparent" id="tehbody">
+    <div class="loading">
+      <center>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <img src="/img/blue_room_logo.png"><br>
+        <img src="/img/loader2.gif">
+        <br>
+        <h3>
+          Designed at
+        </h3>
+        <h3 style="font-family: Consolas, monaco, monospace; color: #000000; background-color: #ffff00; display: inline">coding(brum);</h3>
+        <h3>
+          By:<br>
+          Jay Williams<br>
+          Nikash Chekuri<a href="https://snusercontent.global.ssl.fastly.net/member-profile-full/44/4288444_8862847.jpg">.</a><br>
+          Gokul Menon<br>
+          Rory Sharp<br>
+          Shaquille<br>
+      </center>
+    </div>
     <!-- HACK: Preload images
          TODO: Theres got to be a better solution to the display flashing than this -_-
     -->
@@ -30,9 +54,9 @@
     <img src="orange2.jpg" style="display:none;" alt="" />
     <img src="orange3.jpg" style="display:none;" alt="" />
     <img src="orange4.jpg" style="display:none;" alt="" />
-    <div id="dummy" style="display: none;"></div>
-    <h1 id="scorecount" style="color: black; padding-left: 20px"> </h1>     <!--// Create the score count display element -->
-    <center>
+    <div class="gamecomponent" id="dummy" style="display: none;"></div>
+    <h1 class="gamecomponent" id="scorecount" style="color: black; padding-left: 20px"> </h1>     <!--// Create the score count display element -->
+    <center class="gamecomponent">
       <h1 class="words" style="font-family: captcha"></h1>                  <!--
         // Create the element to display the fruit you got to hit TODO: Refactor QUESTION: Should we create this in JS? -->
 
@@ -93,15 +117,6 @@
       var snd = new Audio(soundfile);
       snd.play()
     }
-    var nanobar = new Nanobar( options );
-    var b = 0;
-    var meee = setInterval(function () {
-      b++
-      nanobar.go( Math.round( (b / 600 ) * 100 ) )
-      if(b > 600) {
-        clearInterval(meee)
-      }
-    }, 100)
 
     for (var i = 0; i < fruits.length; i++){                                    // Go throught fruit objects
       out.push(fruits[i].name)                                                  // add the name of fruit to Array
@@ -118,9 +133,21 @@
       }                                                                         // TODO: Why is this method so HACK y? It doesn't need to be
       return out[name]                                                          // Return the choice from the array
     }
-    setTimeout(function(){
-      initPic(getImageFromName(choose(out)), choose(out))                        // Set a random background and text
-    }, 200)
+    setTimeout(function() {                                                     // DO NOT LOOK AT THIS CODE
+      setTimeout(function(){                                                    // THIS IS NOT A FAKE LOADING SCREEN AT ALL
+        initPic(getImageFromName(choose(out)), choose(out))                     // Set a random background and text
+      }, 200)
+      var nanobar = new Nanobar( options );                                     // Create the time bar
+      var b = 0;
+      var meee = setInterval(function () {                                      // And increment it
+        b++
+        nanobar.go( Math.round( (b / 6000 ) * 100 ) )
+        if(b > 6000) {
+          clearInterval(meee)
+        }
+      }, 10)
+      $(".loading").css({"display": "none"})
+    }, 2000)
 
     function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
@@ -145,7 +172,7 @@
         getColor(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1, function (correctColor) { // Get the average image color
           $(".words").css("color", correctColor);                               // Then set the word's color to it
         })
-      }, 70)
+      }, 10)
       randomMove($(".words"))                                                   // CHANGED: Now moves text each time
       current.pic = pic;
       current.word = word;
@@ -186,7 +213,7 @@
         })
       });
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
-    }, 60000)
+    }, 62000)
 
     var correct = 0;                                                             // Start at 0 wins
     var incorrect = 0
