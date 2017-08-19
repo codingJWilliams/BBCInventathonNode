@@ -79,10 +79,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.8/sweetalert2.min.js"></script>
   <!--                                                                          // End JS imports -->
   <script>
-    var demoMode = false;
-    if (demoMode) {
-      $(".words").css({ "border": "10px solid red"})
-    }
     var fruits = [
       {
         name: "Lemon",
@@ -105,11 +101,32 @@
         key: "Digit3"
       }
     ]
+    var options = {
+      gamelength: 10,             // Seconds
+      loadingscreenlength: 2,     // Seconds
+      time_remaining_bar: true,
+      loadingscreen: true,
+      camo: true,
+      randomMove: true,
+      demo: false,
+      leaderboard: false,
+      sounds: {
+        success: true,
+        fail: true
+      },
+      lang: {
+        points: "You got $score points!",
+        scoreboard_entry: "$name - $score"
+      }
+    };
+    if (options.demo) {
+      $(".words").css({ "border": "10px solid red"})
+    }
     var soundUrl = "https://freesound.org/people/LittleRainySeasons/sounds/335908/download/335908__littlerainyseasons__correct.mp3";
     var badSound = "https://freesound.org/people/RICHERlandTV/sounds/216090/download/216090__richerlandtv__bad-beep-incorrect.mp3";
     var out = [];                                                               // Initialise array of names of fruits
     var mappings = {};
-    var options = {
+    var nanooptions = {
       id: 'my-id',
       target: document.getElementById('tehbody')
     };
@@ -133,21 +150,39 @@
       }                                                                         // TODO: Why is this method so HACK y? It doesn't need to be
       return out[name]                                                          // Return the choice from the array
     }
-    setTimeout(function() {                                                     // DO NOT LOOK AT THIS CODE
-      setTimeout(function(){                                                    // THIS IS NOT A FAKE LOADING SCREEN AT ALL
-        initPic(getImageFromName(choose(out)), choose(out))                     // Set a random background and text
-      }, 200)
-      var nanobar = new Nanobar( options );                                     // Create the time bar
-      var b = 0;
-      var meee = setInterval(function () {                                      // And increment it
-        b++
-        nanobar.go( Math.round( (b / 6000 ) * 100 ) )
-        if(b > 6000) {
-          clearInterval(meee)
+    if (options.loadingscreen) {
+      setTimeout(function() {                                                   // DO NOT LOOK AT THIS CODE
+        setTimeout(function(){                                                  // THIS IS NOT A FAKE LOADING SCREEN AT ALL
+          initPic(getImageFromName(choose(out)), choose(out))                   // Set a random background and text
+        }, 100)
+        if (options.time_remaining_bar){
+          var nanobar = new Nanobar( nanooptions );                             // Create the time bar
+          var b = 0;
+          var meee = setInterval(function () {                                  // And increment it
+            b++
+            nanobar.go( Math.round( (b / (options.gamelength * 10) ) * 100 ) )
+            if(b > options.gamelength * 10) {                                   // If the time has elapsed
+              clearInterval(meee)                                               // DELETE IT
+            }
+          }, 100)                                                               // And do that every 100 ms
         }
-      }, 10)
+        $(".loading").css({"display": "none"})                                  // Remove the *cough cough* loading screen
+      }, options.loadingscreenlength * 1000)                                    // <- This does not set the time the loading screen displays for
+    } else {
       $(".loading").css({"display": "none"})
-    }, 2000)
+      initPic(getImageFromName(choose(out)), choose(out))                       // Set a random background and text
+      if (options.time_remaining_bar){
+        var nanobar = new Nanobar( nanooptions );                               // Create the time bar
+        var b = 0;
+        var meee = setInterval(function () {                                    // And increment it
+          b++
+          nanobar.go( Math.round( (b / 600 ) * 100 ) )
+          if(b > 600) {                                                         // If the time has elapsed
+            clearInterval(meee)                                                 // DELETE IT
+          }
+        }, 100)                                                                 // And do that every 100 ms
+      }
+    }
 
     function choose(choices) {                                                  // Makes a random choice from Array, eg. [1,2,5] => 1 or 2 or 5
       var index = Math.floor(Math.random() * choices.length);
@@ -168,12 +203,18 @@
     function initPic(pic, word) {                                               // Function that sets the background and word
       $("html").css("background-image", pic);                                   // Set page background to pic
       $(".words").text(word);                                                   // Set "words" element to the name of what you gotta click
-      setTimeout(function () {                                                  // After 70ms, so that the background loads first
-        getColor(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1, function (correctColor) { // Get the average image color
-          $(".words").css("color", correctColor);                               // Then set the word's color to it
-        })
-      }, 10)
-      randomMove($(".words"))                                                   // CHANGED: Now moves text each time
+      if (options.camo) {
+        setTimeout(function () {                                                  // After 70ms, so that the background loads first
+          getColor(pic.replace("url('", "").replace("')", ""), fruits[2].pics.indexOf(pic) !== -1, function (correctColor) { // Get the average image color
+            $(".words").css("color", correctColor);                               // Then set the word's color to it
+          })
+        }, 10)
+      } else {
+        $(".words").css("color", "black");
+      }
+      if(options.randomMove){
+        randomMove($(".words"))                                                 // CHANGED: Now moves text each time
+      }
       current.pic = pic;
       current.word = word;
     }
@@ -182,38 +223,40 @@
       $("html").css("background-image", "");                                    // Remove background image
       $("html").css("background-color", "black");                               // Set the background black
       $(".words").remove()                                                      // Remove the current word (ie banana)
-      $(".win2").text("You scored " + (correct - incorrect) + " points.")       // Set winning text
+      $(".win2").text(options.lang.points.replace("$score", (correct - incorrect).toString())) // Set winning text
       $(".win2").fadeIn()                                                       // Fade in the winning text
-      $(".sboard").fadeIn()                                                     // Fade in the scoreboard
-      $.get("/get-score/", function (d) {                                       // Download the updated scoreboard
-        var arr = JSON.parse(d);                                                // Parse what we've been given
-        for (var i = 0; i < arr.length ; i++) {                                 // Go through all the top 20 scores
-          $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
-        }
-      })
-      swal({                                                                    // Create a dialog box:
-        title: 'What\'s your name?',
-        input: 'text',                                                          // With an input box
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        showLoaderOnConfirm: true,
-        allowOutsideClick: false
-      }).then(function (name) {                                                 // Then when user clicks submit
-        $.post("/add-score/", {name: name, score: (correct - incorrect)}, function (data) { // Then when that data is successfully sent
-          console.info(data);
-          setTimeout(function () {
-            $.get("/get-score/", function (d) {                                   // Download the updated scoreboard
-              var arr = JSON.parse(d);                                            // Parse what we've been given
-              $(".leaderboard").html("")                                          // Remove old scores
-              for (var i = 0; i < arr.length ; i++) {                             // Go through all the top 20 scores
-                $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
-              }
-            })
-          }, 500)
+      if(options.leaderboard){
+        $(".sboard").fadeIn()                                                     // Fade in the scoreboard
+        $.get("/get-score/", function (d) {                                       // Download the updated scoreboard
+          var arr = JSON.parse(d);                                                // Parse what we've been given
+          for (var i = 0; i < arr.length ; i++) {                                 // Go through all the top 20 scores
+            $(".leaderboard").append("<li class='list-group-item'> " + options.lang.scoreboard_entry.replace("$name", arr[i].name).replace("$score", arr[i].score) + " </li>") // And add them to the leaderboard
+          }
         })
-      });
+        swal({                                                                    // Create a dialog box:
+          title: 'What\'s your name?',
+          input: 'text',                                                          // With an input box
+          showCancelButton: true,
+          confirmButtonText: 'Submit',
+          showLoaderOnConfirm: true,
+          allowOutsideClick: false
+        }).then(function (name) {                                                 // Then when user clicks submit
+          $.post("/add-score/", {name: name, score: (correct - incorrect)}, function (data) { // Then when that data is successfully sent
+            console.info(data);
+            setTimeout(function () {
+              $.get("/get-score/", function (d) {                                   // Download the updated scoreboard
+                var arr = JSON.parse(d);                                            // Parse what we've been given
+                $(".leaderboard").html("")                                          // Remove old scores
+                for (var i = 0; i < arr.length ; i++) {                             // Go through all the top 20 scores
+                  $(".leaderboard").append("<li class='list-group-item'> " + arr[i].name + " - " + arr[i].score + " </li>") // And add them to the leaderboard
+                }
+              })
+            }, 500)
+          })
+        });
+      };
       document.onkeyup = function () {};                                        // Finally, set the "onkeyup" function to empty so that users can't continue playing
-    }, 62000)
+    }, options.loadingscreen ? (options.gamelength * 1000) + (options.loadingscreenlength * 1000) : options.gamelength * 1000)
 
     var correct = 0;                                                             // Start at 0 wins
     var incorrect = 0
@@ -226,19 +269,21 @@
         var key2 = choose(out)                                                  // ^
         correct++;                                                               // Add 1 to the win counter
         $("#scorecount").text(correct - incorrect)
-        playSound(soundUrl);
+        if(options.sounds.success){
+          playSound(soundUrl);
+        }
         if ((correct - incorrect) >= 40 && (correct - incorrect) <= 42) {
           initPic("url('legendary.png')", key)
         } else {
           initPic(getImageFromName(key2), key)                                  // And set the background and text to those random fruits
         }
       } else {
-        playSound(badSound)
+        if(options.sounds.fail){
+          playSound(badSound);
+        }
         incorrect = incorrect + 1;                                              // If the fruit is wrong, add one to the incorrect score
         $("#scorecount").text(correct - incorrect)                              // And update visual counter
       }
-
-
     }
   </script>
   </html>
