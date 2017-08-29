@@ -27,7 +27,27 @@ function getTopLeaderboard(callback1){                                          
   }
 )
 }
+function sendToDiscord(name, score){
+  request({
+    url: "https://discordapp.com/api/webhooks/352125618101551116/8ZWPzd0Yk-lIx09x-gCGevO0cIZcc-hkMQh5W470J5SgbnyMrgcovTCDjNGDnVpREPTb",
+    method: "POST",
+    json: true,
+    body: {
+    	"embeds": [
+      		{
+      			"title": name + " has played the game",
+      			"color": 16776960,
+      			"description": "They scored **"+ score.toString() +"** points."
+      		}
+    		]
+    }
+  }, function (err, resp, data) {
+    if (err) console.error(err);
+
+  })
+}
 function saveToLeaderboard(name, score){                                        // Saves a name and score to leaderboard
+  sendToDiscord(name, score)
   request('http://www.purgomalum.com/service/json?text=' + name.replace(" ", "+"), function (error, response, body) {
     console.log(body)
     var censord = JSON.parse(body).result
