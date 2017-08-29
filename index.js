@@ -3,6 +3,7 @@ var http = require('http').Server(app);                                         
 const fs = require('fs');                                                       // Import FileSystem to save leaderboards
 var bodyParser = require('body-parser')
 var request = require('request');
+const jetpack = require('fs-jetpack');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -29,7 +30,7 @@ function getTopLeaderboard(callback1){                                          
 }
 function sendToDiscord(name, score){
   request({
-    url: "https://discordapp.com/api/webhooks/352125618101551116/8ZWPzd0Yk-lIx09x-gCGevO0cIZcc-hkMQh5W470J5SgbnyMrgcovTCDjNGDnVpREPTb",
+    url: jetpack.read('discord-webhook-url.txt'),
     method: "POST",
     json: true,
     body: {
