@@ -28,27 +28,24 @@ function getTopLeaderboard(callback1){                                          
   }
 )
 }
-function sendToDiscord(name, score){
-  request({
-    url: jetpack.read('discord-webhook-url.txt'),
-    method: "POST",
-    json: true,
-    body: {
-    	"embeds": [
-      		{
-      			"title": name + " has played the game",
-      			"color": 16776960,
-      			"description": "They scored **"+ score.toString() +"** points."
-      		}
-    		]
-    }
-  }, function (err, resp, data) {
-    if (err) console.error(err);
-
-  })
+async function sendToDiscord(name, score){
+    return await fetch(jetpack.read('discord-webhook-url.txt'), {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: {
+    	embeds: [
+            {
+                "title": name + " has played the game",
+                "color": 16776960,
+                "description": "They scored **"+ score.toString() +"** points."
+            }
+        ]
+    })
 }
 function saveToLeaderboard(name, score){                                        // Saves a name and score to leaderboard
   sendToDiscord(name, score)
+  // Use censor filter service
   request('http://www.purgomalum.com/service/json?text=' + name.replace(" ", "+"), function (error, response, body) {
     console.log(body)
     var censord = JSON.parse(body).result
@@ -63,9 +60,8 @@ function saveToLeaderboard(name, score){                                        
 app.get('/', function(req, res){                                                // On someone requesting the homepage
   res.sendFile(__dirname + '/html/game.html');                                  // Send them the "game.html" file
 });
-app.post("/clear-leaderboard/", function (req, res) {                           // I have an IFTTT set up to call this at 1:pm every day
+app.schedule("0 1 * * *", function () {                                         // I have an IFTTT set up to call this at 1:pm every day
   saveLeaderboard([])                                                           // Delete the leaderboard
-  res.end('{"done": true}')
 })
 app.post("/add-score/", function(req, res){                                     // On someone triggering add-score
   var name = req.body.name                                                      // Store name
